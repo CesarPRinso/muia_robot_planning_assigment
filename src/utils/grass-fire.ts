@@ -9,6 +9,18 @@ export type Path = Array<Point>
 //     0,'x','x',0,
 //     0, 0,  0, 0,
 //     ].map(e => e==='x'?Infinity:e) as Array<0|1>
+/*
+
+código exporta dos funciones, grassFire() y searchPath(), 
+que son utilizadas para calcular la distancia desde un punto de destino en un mapa y 
+encontrar un camino hacia el punto de destino, respectivamente. La función grassFire() 
+utiliza el algoritmo "grass fire", que explora el mapa comenzando desde el punto de destino y 
+asigna un valor de distancia a cada punto en el mapa basado en su proximidad al punto de destino. 
+La función searchPath() luego utiliza los valores de distancia calculados por la función grassFire() 
+para buscar el camino más corto desde el punto de inicio al punto de destino moviéndose hacia el
+ punto vecino con el valor de distancia más pequeño en cada paso. Además, 
+ hay varias funciones y variables de ayuda definidas para ayudar con la implementación de estas dos funciones.
+*/
     
 type VisitedMap = Array<true|false>
 let distance_arr:DistanceData = []

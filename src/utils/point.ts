@@ -1,3 +1,17 @@
+/**
+ * Este código define la clase Point, que representa un punto en un mapa bidimensional. 
+ * La clase tiene los atributos "i" y "j", que representan las coordenadas del punto en el eje x e y respectivamente. 
+ * También se importa la clase "SizeMap", que es utilizada para obtener el tamaño del mapa.
+
+La clase tiene varios métodos estáticos, como FROM_POS, FROM_CLICK, POS_FROM_POINT y POINT_IN_RANGE, 
+que permiten crear una instancia de Point a partir de una posición en un arreglo unidimensional, 
+un objeto click y verificar si un punto está dentro del rango del mapa.
+
+La clase también tiene un método getter "position" que devuelve la posición en un arreglo unidimensional de un punto dado y 
+un método getter "inRange" que verifica si un punto está dentro del rango del mapa. Además, tiene un método getter "neighbours" 
+que devuelve un arreglo de puntos vecinos (arriba, abajo, izquierda, derecha) de un punto dado.
+ */
+
 import SizeMap from './size-map'
 import { Click } from './click';
 

@@ -1,5 +1,24 @@
 import { Path } from './grass-fire'
 
+/**+
+ * Este código exporta varias funciones y tipos de datos relacionados con el 
+ * manejo de imágenes en un canvas. Los tipos de datos exportados son PixelData, 
+ * ImageData, MapData y DistanceData. PixelData es un arreglo de 4 números que 
+ * representan los valores RGBA de un píxel. ImageData es un arreglo de números 
+ * que representa los valores RGBA de todos los píxeles de una imagen. MapData es un arreglo de 0 y 1 
+ * que representa los lugares vacíos y los lugares ocupados en una imagen. DistanceData es un arreglo de números que 
+ * representa la distancia de cada punto en un mapa al punto objetivo.
+
+Las funciones exportadas son getCanvasCtx, clickedInEmptySpace, getPixelFromClick, pixelIsWhite, imageDataToMap y drawPath. 
+getCanvasCtx toma una referencia de un canvas y devuelve el canvas y el contexto. clickedInEmptySpace toma una referencia de canvas y
+ un objeto click y devuelve si el lugar donde se hizo click está vacío o no. getPixelFromClick toma un canvas, un contexto y un objeto click y 
+ devuelve los datos del píxel en la posición del click. pixelIsWhite toma los datos de un píxel y devuelve si el píxel es blanco o no. 
+ imageDataToMap toma los datos de una imagen y devuelve un MapData. drawPath toma un camino y un contexto y dibuja el camino en el canvas.
+
+
+
+
+ */
 // 4 elements of a pixel (RGBA)
 type R = number
 type G = number

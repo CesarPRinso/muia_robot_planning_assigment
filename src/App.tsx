@@ -1,3 +1,20 @@
+/*
+Este código es una aplicación de React que permite seleccionar una imagen, mostrarla en un canvas y 
+encontrar un camino entre dos puntos seleccionados en la imagen. Utiliza la técnica de Grass Fire Algorithm 
+para calcular la distancia entre cada punto de la imagen y el punto de inicio, y 
+luego utiliza esa información para encontrar el camino más corto entre el punto de inicio y 
+el punto final. La aplicación también tiene la capacidad de dibujar el camino encontrado en el canvas.
+
+
+handleImageChange: manejador de eventos que se ejecuta cuando el usuario selecciona una imagen en el input de tipo "file". 
+Utiliza un FileReader para leer la imagen seleccionada y actualizar el estado de la aplicación con la URL de la imagen.
+
+updateImageCanvas: método que se utiliza para actualizar la imagen mostrada en el canvas. Toma como parámetro opcional la URL de la imagen, 
+y si no se proporciona, utiliza el URL de la imagen guardada en el estado de la aplicación. Crea una instancia de una imagen,
+establece la propiedad "crossOrigin" en "anonymous" para evitar problemas de seguridad, y establece la URL de la imagen. Luego, 
+establece el ancho del canvas
+
+ */
 import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
 import { getCanvasCtx, clickedInEmptySpace, imageDataToMap, DistanceData, drawPath } from './utils/image-data';
