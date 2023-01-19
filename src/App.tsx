@@ -73,6 +73,13 @@ const App: React.FC = () => {
   }
   useEffect(updateImageCanvas, [])
 
+  const measureMetrics = (grassFireMap:any) => {
+    const startTime = performance.now();
+    console.log(grassFireMap)
+    //llamada del método para encontrar el camino optimo
+    const endTime = performance.now();
+  }
+
   const handleImageChange = (e:React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     const reader = new FileReader()
@@ -122,13 +129,18 @@ const App: React.FC = () => {
         console.log('mapData',JSON.stringify(mapData))
         // const grassFireMap = grassFire(mapData, new Point(0,0))
         const goalPoint = Point.FROM_CLICK(click, canvasRef.current as HTMLCanvasElement)
+        const startTime = performance.now();
         const grassFireMap = grassFire(mapData, goalPoint)
         setGrassFireMap(grassFireMap)
+        const endTime = performance.now();
+        
 
         // console.log('grassFireMap', grassFireMap)
         // CALCULATE PATH
         const startPoint = Point.FROM_CLICK(click1, canvasRef.current as HTMLCanvasElement)
         const pathPoints = searchPath(grassFireMap, startPoint, goalPoint)
+        const time = endTime - startTime;
+        console.log(`Time: ${time}ms, `);
         // console.log('pathPoints', pathPoints)
         drawPath(pathPoints, ctx)
         break;

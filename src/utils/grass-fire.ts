@@ -1,7 +1,7 @@
 import {MapData, Distance, DistanceData} from './image-data'
 import {Point, Position} from './point'
 import SizeMap from './size-map'
-
+import { Heap } from './Heap';
 export type Path = Array<Point>
 // const TEST_M1 = [
 //     0,'x','x',0,
@@ -47,6 +47,76 @@ function visited_point(point:Point){
 
 const isWall = (point:Point) => (distance_arr[point.position] === Infinity)
 
+function heuristic(point: Point, goal: Point) {
+    // Distancia Manhattan
+    return Math.abs(point.i - goal.i) + Math.abs(point.j - goal.j)
+}
+
+/**
+ * 
+ * La función reconstructPath se utiliza para reconstruir el camino óptimo desde el punto de inicio al 
+ * punto de destino una vez que se ha encontrado el camino óptimo utilizando el algoritmo A*. Utiliza un mapa de 
+ * "cameFrom" para rastrear los puntos anteriores desde el punto de destino hasta el punto de inicio, 
+ * y devuelve una lista de puntos que representa el camino óptimo.
+ */
+
+function reconstructPath(cameFrom: Map<Point, Point>, current: Point): Path {
+    const totalPath = [current];
+    while (cameFrom.has(current)) {
+        current = cameFrom.get(current)!;
+        totalPath.unshift(current);
+    }
+    return totalPath;
+}
+
+
+
+export function findOptimalPathAStar(matrix:MapData, startPoint:Point, goalPoint:Point): Path {
+    const openList = new Heap(startPoint);
+    const closedList = new Set();
+    const cameFrom = new Map();
+
+    const gScore = new Map();
+    const fScore = new Map();
+
+    // initialize starting point
+    openList.push(startPoint);
+    gScore.set(startPoint, 0);
+    fScore.set(startPoint, heuristic(startPoint, goalPoint));
+
+    while (!openList.isEmpty()) {
+        const currentPoint = openList.pop();
+        closedList.add(currentPoint);
+
+        if (currentPoint === goalPoint) {
+            return reconstructPath(cameFrom, goalPoint);
+        }
+
+        currentPoint.neighbours.forEach((neighbour: any) => {
+            if (closedList.has(neighbour)) {
+                return;
+            }
+            if (isWall(neighbour)) {
+                closedList.add(neighbour);
+                return;
+            }
+
+            const tentativeGScore = gScore.get(currentPoint) + 1; // assuming all edges have a weight of 1
+            const neighbourGScore = gScore.get(neighbour) || Infinity;
+            if (tentativeGScore >= neighbourGScore) {
+                return;
+            }
+
+            cameFrom.set(neighbour, currentPoint);
+            gScore.set(neighbour, tentativeGScore);
+            fScore.set(neighbour, gScore.get(neighbour) + heuristic(neighbour, goalPoint));
+
+            openList.push(neighbour);
+        });
+    }
+    return []; // no path was found
+}
+
 /**
  * Calculate distance in a map following the GRASS FIRE ALGORITHM
  * @param matrix 
@@ -73,6 +143,7 @@ export function grassFire(matrix:MapData, goalPoint:Point):DistanceData{
     return distance_arr
 }
 
+
 /**
  * SEARCH PATH similar to gradient descent, searching for the minimum neighbour point each time
  * @param grassFireMatrix 
@@ -84,7 +155,7 @@ export function searchPath(grassFireMatrix:DistanceData, startPoint:Point, goalP
     let goalReached = false
     let isReachable = true
     let currentPoint = startPoint
-
+    let visitedNodes = 0
     console.log('searchPath START: ', startPoint, grassFireMatrix[startPoint.position])
     console.log('searchPath GOAL: ', goalPoint, grassFireMatrix[goalPoint.position])
     if(grassFireMatrix[startPoint.position] === 0 ){
@@ -93,6 +164,7 @@ export function searchPath(grassFireMatrix:DistanceData, startPoint:Point, goalP
     }
     printMatrix(grassFireMatrix, goalPoint.position, startPoint.position)
     while (!goalReached && isReachable && currentPoint.inRange){
+        visitedNodes++;
         const neighbours = currentPoint.neighbours
         // eslint-disable-next-line no-loop-func
         let distances = neighbours.map(n => {
@@ -112,6 +184,7 @@ export function searchPath(grassFireMatrix:DistanceData, startPoint:Point, goalP
             return []
         }
     }
+    console.log('visited nodes', visitedNodes)
     return pathPoints
 }
 
@@ -143,6 +216,6 @@ export function printMatrix(m:DistanceData, GOAL_POSITION=-1, START_POSITION=-1,
             }
             row_elems.push(charToShow)
         }
-        // console.log(''+row_elems.map(e => e==='Infinity'?'XX':e))
+         console.log(''+row_elems.map(e => e==='Infinity'?'XX':e))
     }
 }
