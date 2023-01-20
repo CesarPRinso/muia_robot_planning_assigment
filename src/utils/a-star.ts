@@ -2,6 +2,7 @@ import {MapData, Distance, DistanceData} from './image-data'
 import {Point, Position} from './point'
 import SizeMap from './size-map'
 import { Heap } from './Heap';
+import { start } from 'repl';
 export type Path = Array<Point>
 
 type VisitedMap = Array<true|false>
@@ -29,15 +30,12 @@ function reconstructPath(cameFrom: Map<Point, Point>, current: Point): Path {
 
 function heuristic(point: Point, goal: Point) {
     // Distancia Manhattan
-    console.log("Distancia Manhattan")
-    console.log(Math.abs(point.i - goal.i) + Math.abs(point.j - goal.j))
+    console.log('Distancia Manhattan: ', Math.abs(point.i - goal.i) + Math.abs(point.j - goal.j))
     return Math.abs(point.i - goal.i) + Math.abs(point.j - goal.j)
 }
 
-export function findOptimalPathAStar(matrix:MapData, startPoint:Point, goalPoint:Point): Path {
+export function findOptimalPathAStar(matrix:DistanceData, startPoint:Point, goalPoint:Point): Path {
     console.log(startPoint)
-    const [distance_arr, ] = setAuxiliarArrays(matrix)
-    //const openList = new Heap(startPoint);
     const openList:Path = [startPoint]
     const closedList = new Set();
     const cameFrom = new Map();
@@ -49,10 +47,12 @@ export function findOptimalPathAStar(matrix:MapData, startPoint:Point, goalPoint
     openList.push(startPoint);
     gScore.set(startPoint, 0);
     fScore.set(startPoint, heuristic(startPoint, goalPoint));
-    console.log('searchPath START: ', startPoint, distance_arr[startPoint.position])
-    console.log('searchPath GOAL: ', goalPoint, distance_arr[goalPoint.position])
+    console.log('searchPath START: ', startPoint, matrix[startPoint.position])
+    console.log('searchPath GOAL: ', goalPoint, matrix[goalPoint.position])
+    console.log('gScore: ', gScore)
+    console.log('gScore: ', fScore)
     //printMatrix(distance_arr, goalPoint.position, startPoint.position)
-    if(distance_arr[startPoint.position] === 0 ){
+    if(matrix[startPoint.position] === 0 ){
         alert('GOAL POINT IS NOT REACHABLE')
         return []
      }
@@ -61,6 +61,9 @@ export function findOptimalPathAStar(matrix:MapData, startPoint:Point, goalPoint
         closedList.add(currentPoint);
 
         if (currentPoint === goalPoint) {
+            console.log("============")
+            console.log(reconstructPath(cameFrom, goalPoint))
+            console.log("============")
             return reconstructPath(cameFrom, goalPoint);
         }
         if(currentPoint) {
@@ -88,10 +91,7 @@ export function findOptimalPathAStar(matrix:MapData, startPoint:Point, goalPoint
         }
         
     }
-    console.log("============")
-    console.log(openList)
-    console.log("============")
-    return openList; // no path was found
+    return  []; // no path was found
 }
 
 

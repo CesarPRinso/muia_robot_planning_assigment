@@ -74,22 +74,13 @@ const App: React.FC = () => {
   }
   useEffect(updateImageCanvas, [])
 
-  const measureMetrics = (grassFireMap:any) => {
-    const startTime = performance.now();
-    console.log(grassFireMap)
-    //llamada del método para encontrar el camino optimo
-    const endTime = performance.now();
-  }
-
   const handleImageChange = (e:React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     const reader = new FileReader()
     const {files} = e.target
     const file = files && files[0]
     reader.onloadend = () => {
-      // setFile(file)
       if('string' === typeof reader.result){
-        // const imagePreviewUrl = reader.result
         setImagePreviewUrl(reader.result)
         setImageFile(file)
         updateImageCanvas(reader.result)
@@ -127,20 +118,17 @@ const App: React.FC = () => {
       case 'end':
         setClick2(click)
         const mapData = imageDataToMap(imageDataFromCanvas)
-        console.log('mapData',JSON.stringify(mapData))
-        // const grassFireMap = grassFire(mapData, new Point(0,0))
+        //console.log('mapData',JSON.stringify(mapData))
         const goalPoint = Point.FROM_CLICK(click, canvasRef.current as HTMLCanvasElement)
         const startTime = performance.now();
-        const grassFireMap = grassFire(mapData, goalPoint)
-        setGrassFireMap(grassFireMap)
-        const endTime = performance.now();
-        
-
-        // console.log('grassFireMap', grassFireMap)
         // CALCULATE PATH
         const startPoint = Point.FROM_CLICK(click1, canvasRef.current as HTMLCanvasElement)
+        const grassFireMap = grassFire(mapData, goalPoint, startPoint)
+        setGrassFireMap(grassFireMap)
+        const endTime = performance.now();
+        console.log('grassFireMap', grassFireMap)
         //const pathPoints = searchPath(grassFireMap, startPoint, goalPoint)
-       const pathPoints = findOptimalPathAStar(mapData, startPoint, goalPoint)
+        const pathPoints = findOptimalPathAStar(grassFireMap, startPoint, goalPoint)
         const time = endTime - startTime;
         console.log(`Time: ${time}ms, `);
         // console.log('pathPoints', pathPoints)

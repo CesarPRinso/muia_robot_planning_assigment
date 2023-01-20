@@ -67,4 +67,5 @@ export class Point {
             new Point(this.i+1,this.j),
         ]
     }
+
 }

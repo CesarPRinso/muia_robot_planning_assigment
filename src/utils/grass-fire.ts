@@ -30,7 +30,6 @@ export const setAuxiliarArrays = (matrix:MapData):[DistanceData, VisitedMap] => 
     // distance_arr = [...TEST_M1].map(e=>e? Infinity: e)//[...matrix].map(e=>e? Infinity: e)
     distance_arr = [...matrix].map(e=>e===1? Infinity: e)
     visited_arr = new Array(distance_arr.length).fill(false)
-    printMatrix(distance_arr)
     return [distance_arr, visited_arr]
 }
 
@@ -47,27 +46,27 @@ function visited_point(point:Point){
 
 const isWall = (point:Point) => (distance_arr[point.position] === Infinity)
 
-
-
-/**
- * 
- * La función reconstructPath se utiliza para reconstruir el camino óptimo desde el punto de inicio al 
- * punto de destino una vez que se ha encontrado el camino óptimo utilizando el algoritmo A*. Utiliza un mapa de 
- * "cameFrom" para rastrear los puntos anteriores desde el punto de destino hasta el punto de inicio, 
- * y devuelve una lista de puntos que representa el camino óptimo.
- */
-
-
-
-
-
-
 /**
  * Calculate distance in a map following the GRASS FIRE ALGORITHM
  * @param matrix 
  * @param goalPoint 
  */
-export function grassFire(matrix:MapData, goalPoint:Point):DistanceData{
+/**
+ * implementación del algoritmo GrassFire para calcular la distancia entre cada punto en un mapa 2D y 
+ * un punto objetivo específico. La función "grassFire" recibe dos parámetros: "matrix" es el mapa 2D en sí, 
+ * donde cada punto es representado por un número (1 para espacios vacíos, 0 para paredes), y "goalPoint" 
+ * es el punto objetivo al cual se desea calcular la distancia.
+La función comienza creando dos arreglos auxiliares: "distance_arr" 
+es un arreglo que almacenará la distancia desde cada punto del mapa hasta el punto objetivo, 
+y "visited_arr" es un arreglo booleano que indica si cada punto ha sido visitado o no. 
+El arreglo "distance_arr" se inicializa con infinito para todos los puntos que son paredes 
+(es decir, aquellos que tienen un valor de 1 en el mapa) y con 0 para el punto objetivo.
+Luego, la función utiliza un ciclo "while" para explorar los puntos adyacentes al punto objetivo, actualizando la distancia en el arreglo "distance_arr" 
+y agregando los puntos adyacentes no visitados a una lista "nextPointsToExplore
+ */
+export function grassFire(matrix:MapData, goalPoint:Point, startPoint:Point):DistanceData{
+    console.log('StartPoing: ', startPoint)
+    console.log('Valor en la matriz: ', matrix[startPoint.position])
     const [distance_arr, ] = setAuxiliarArrays(matrix)
     var nextPointsToExplore = [goalPoint]
 
@@ -94,6 +93,18 @@ export function grassFire(matrix:MapData, goalPoint:Point):DistanceData{
  * @param grassFireMatrix 
  * @param startPoint 
  * @param goalPoint 
+ * 
+ * La función searchPath se encarga de encontrar el camino más corto entre dos puntos (startPoint y goalPoint) 
+ * en una matriz dada (grassFireMatrix) utilizando el algoritmo de búsqueda de costo uniforme.
+La función comienza asignando el punto de inicio a una lista llamada pathPoints y declarando 
+variables como goalReached, isReachable y currentPoint con valores iniciales específicos. 
+Luego verifica si es posible llegar al punto objetivo, si no es posible, retorna un arreglo vacío.
+Dentro de un ciclo while, la función se mueve desde el punto de inicio hasta el punto objetivo, 
+evaluando en cada iteración los vecinos del punto actual y eligiendo el vecino con la distancia más corta 
+(menor) desde el punto de inicio hasta ese vecino. El punto actual se actualiza al vecino elegido y 
+se agrega al arreglo pathPoints. Si el punto actual es igual al punto objetivo, significa que se ha encontrado el camino más corto y se sale del ciclo.
+La función también tiene un mecanismo de seguridad, para evitar que el ciclo while siga ejecutándose de manera infinita. 
+Si el tamaño del arreglo pathPoints supera un determinado valor, retorna un arreglo vacío.
  */
 export function searchPath(grassFireMatrix:DistanceData, startPoint:Point, goalPoint:Point){
     const pathPoints:Path = [startPoint]
