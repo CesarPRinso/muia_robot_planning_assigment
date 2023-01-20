@@ -21,6 +21,7 @@ import { getCanvasCtx, clickedInEmptySpace, imageDataToMap, DistanceData, drawPa
 import { grassFire, searchPath } from './utils/grass-fire';
 import { Point } from './utils/point';
 import SizeMap from './utils/size-map';
+import { findOptimalPathAStar } from './utils/a-star';
 
 const POINT_SIZE = 12
 const POINT_STYLE = {
@@ -138,7 +139,8 @@ const App: React.FC = () => {
         // console.log('grassFireMap', grassFireMap)
         // CALCULATE PATH
         const startPoint = Point.FROM_CLICK(click1, canvasRef.current as HTMLCanvasElement)
-        const pathPoints = searchPath(grassFireMap, startPoint, goalPoint)
+        //const pathPoints = searchPath(grassFireMap, startPoint, goalPoint)
+       const pathPoints = findOptimalPathAStar(mapData, startPoint, goalPoint)
         const time = endTime - startTime;
         console.log(`Time: ${time}ms, `);
         // console.log('pathPoints', pathPoints)

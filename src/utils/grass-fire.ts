@@ -47,10 +47,7 @@ function visited_point(point:Point){
 
 const isWall = (point:Point) => (distance_arr[point.position] === Infinity)
 
-function heuristic(point: Point, goal: Point) {
-    // Distancia Manhattan
-    return Math.abs(point.i - goal.i) + Math.abs(point.j - goal.j)
-}
+
 
 /**
  * 
@@ -60,62 +57,10 @@ function heuristic(point: Point, goal: Point) {
  * y devuelve una lista de puntos que representa el camino óptimo.
  */
 
-function reconstructPath(cameFrom: Map<Point, Point>, current: Point): Path {
-    const totalPath = [current];
-    while (cameFrom.has(current)) {
-        current = cameFrom.get(current)!;
-        totalPath.unshift(current);
-    }
-    return totalPath;
-}
 
 
 
-export function findOptimalPathAStar(matrix:MapData, startPoint:Point, goalPoint:Point): Path {
-    const openList = new Heap(startPoint);
-    const closedList = new Set();
-    const cameFrom = new Map();
 
-    const gScore = new Map();
-    const fScore = new Map();
-
-    // initialize starting point
-    openList.push(startPoint);
-    gScore.set(startPoint, 0);
-    fScore.set(startPoint, heuristic(startPoint, goalPoint));
-
-    while (!openList.isEmpty()) {
-        const currentPoint = openList.pop();
-        closedList.add(currentPoint);
-
-        if (currentPoint === goalPoint) {
-            return reconstructPath(cameFrom, goalPoint);
-        }
-
-        currentPoint.neighbours.forEach((neighbour: any) => {
-            if (closedList.has(neighbour)) {
-                return;
-            }
-            if (isWall(neighbour)) {
-                closedList.add(neighbour);
-                return;
-            }
-
-            const tentativeGScore = gScore.get(currentPoint) + 1; // assuming all edges have a weight of 1
-            const neighbourGScore = gScore.get(neighbour) || Infinity;
-            if (tentativeGScore >= neighbourGScore) {
-                return;
-            }
-
-            cameFrom.set(neighbour, currentPoint);
-            gScore.set(neighbour, tentativeGScore);
-            fScore.set(neighbour, gScore.get(neighbour) + heuristic(neighbour, goalPoint));
-
-            openList.push(neighbour);
-        });
-    }
-    return []; // no path was found
-}
 
 /**
  * Calculate distance in a map following the GRASS FIRE ALGORITHM
