@@ -127,8 +127,8 @@ const App: React.FC = () => {
         setGrassFireMap(grassFireMap)
         const endTime = performance.now();
         console.log('grassFireMap', grassFireMap)
-        //const pathPoints = searchPath(grassFireMap, startPoint, goalPoint)
-        const pathPoints = findOptimalPathAStar(grassFireMap, startPoint, goalPoint)
+        const pathPoints = searchPath(grassFireMap, startPoint, goalPoint)
+        //const pathPoints = findOptimalPathAStar(grassFireMap, startPoint, goalPoint)
         const time = endTime - startTime;
         console.log(`Time: ${time}ms, `);
         // console.log('pathPoints', pathPoints)
